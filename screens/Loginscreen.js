@@ -19,6 +19,7 @@ const onPressForgotPassword = () => {
 const onPressSignUp = () => {
 // Do something about signup operation
 };
+
 const [state,setState] = useState({
 email: '',
 password: '',

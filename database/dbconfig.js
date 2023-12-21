@@ -34,10 +34,12 @@ const firestore = getFirestore(app);
 
 // Initialize Firebase Auth
 
+const auth= getAuth(app);
+
 // const auth = initializeAuth(app, {
 //   persistence: getReactNativePersistence(AsyncStorage),
 // });
 
 const storage = getStorage(app);
 
-export {  firestore, storage };
+export {  auth,firestore, storage };

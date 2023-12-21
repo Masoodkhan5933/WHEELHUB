@@ -14,6 +14,32 @@ import { firestore } from '../database/dbconfig';
 const Firestore = () => {
   const [loading, setLoading] = useState(false);
 
+  const setUserProfile = async (userId, profileData) => {
+    try {
+      const userProfileRef = doc(firestore, 'users', userId);
+      await setDoc(userProfileRef, profileData);
+    } catch (error) {
+      console.error('Error setting user profile:', error);
+      throw error;
+    }
+  };
+
+  const getUserProfile = async (userId) => {
+    try {
+      const userProfileRef = doc(firestore, 'users', userId);
+      const docSnap = await getDoc(userProfileRef);
+      const data = docSnap.data();
+      return docSnap.exists() ? data : null;
+    } catch (error) {
+      console.error('Error getting user profile:', error);
+      throw error;
+    }
+  };
+
+
+
+
+
   // User operations
   const addUser = async (userData) => {
     const usersRef = collection(firestore, 'users');
@@ -82,6 +108,8 @@ const Firestore = () => {
   };
 
   return {
+    getUserProfile,
+    setUserProfile,
     addUser,
     deleteUser,
     updateUser,

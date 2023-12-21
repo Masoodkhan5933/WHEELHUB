@@ -1,35 +1,46 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
+import useAuth from '../hooks/auth';
 
 const SignUpView = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const showAlert = viewId => {
-    Alert.alert('Alert', 'Button pressed ' + viewId);
+  // Use the useAuth hook
+  const { signUp } = useAuth();
+
+  const handleSignUp = async () => {
+    try {
+      // Call the signUp function from useAuth hook
+      await signUp(email, password, { fullName });
+      // Handle successful signup, navigate to the home screen, or show a success message
+      Alert.alert('Success', 'Account created successfully');
+    } catch (error) {
+      // Handle signup error, show an error message to the user
+      Alert.alert('Error', error.message);
+    }
   };
 
   return (
     <View style={styles.container}>
-        <Text style={styles.title}> Sign Up</Text>
+      <Text style={styles.title}> Sign Up</Text>
       <View style={styles.inputContainer}>
-      <Image
+        <Image
           style={styles.inputIcon}
           source={{ uri: 'https://img.icons8.com/ios-glyphs/512/user-male-circle.png' }}
         />
         <TextInput
-         
-         style={[styles.inputs, { fontSize: 18 }]}
+          style={[styles.inputs, { fontSize: 18 }]}
           placeholder="Full name"
           keyboardType="email-address"
           underlineColorAndroid="transparent"
-          onChangeText={fullName => setFullName(fullName)}
+          onChangeText={(text) => setFullName(text)}
         />
       </View>
 
       <View style={styles.inputContainer}>
-      <Image
+        <Image
           style={styles.inputIcon}
           source={{ uri: 'https://img.icons8.com/ios-filled/512/circled-envelope.png' }}
         />
@@ -38,27 +49,27 @@ const SignUpView = () => {
           placeholder="Email"
           keyboardType="email-address"
           underlineColorAndroid="transparent"
-          onChangeText={email => setEmail(email)}
+          onChangeText={(text) => setEmail(text)}
         />
       </View>
 
       <View style={styles.inputContainer}>
-      <Image
+        <Image
           style={styles.inputIcon}
           source={{ uri: 'https://img.icons8.com/ios-glyphs/512/key.png' }}
         />
         <TextInput
-        style={[styles.inputs, { fontSize: 18 }]}
+          style={[styles.inputs, { fontSize: 18 }]}
           placeholder="Password"
           secureTextEntry={true}
           underlineColorAndroid="transparent"
-          onChangeText={password => setPassword(password)}
+          onChangeText={(text) => setPassword(text)}
         />
       </View>
 
       <TouchableOpacity
         style={[styles.buttonContainer, styles.signupButton]}
-        onPress={() => showAlert('sign_up')}>
+        onPress={handleSignUp}>
         <Text style={styles.signUpText}>Sign up</Text>
       </TouchableOpacity>
     </View>

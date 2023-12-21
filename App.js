@@ -13,7 +13,9 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
 
-    <CarForm />
+    // <CarForm />
+    // <LoginScreen/>
+    <SignUpView/>
 
     // <NavigationContainer>
     //   <Stack.Navigator initialRouteName="Home">
