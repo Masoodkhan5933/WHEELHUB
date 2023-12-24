@@ -6,6 +6,10 @@ const SignUpView = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [age, setAge] = useState('');
+  const [gender, setGender] = useState('');
+  const [cnic, setCNIC] = useState('');
+  const [district, setDistrict] = useState('');
 
   // Use the useAuth hook
   const { signUp } = useAuth();
@@ -13,7 +17,7 @@ const SignUpView = () => {
   const handleSignUp = async () => {
     try {
       // Call the signUp function from useAuth hook
-      await signUp(email, password, { fullName });
+      await signUp(email, password, { fullName, age, gender, cnic, district });
       // Handle successful signup, navigate to the home screen, or show a success message
       Alert.alert('Success', 'Account created successfully');
     } catch (error) {
@@ -67,6 +71,60 @@ const SignUpView = () => {
         />
       </View>
 
+      <View style={styles.inputContainer}>
+        <Image
+          style={styles.inputIcon}
+          source={{ uri: 'https://img.icons8.com/ios-glyphs/512/calendar.png' }}
+        />
+        <TextInput
+          style={[styles.inputs, { fontSize: 18 }]}
+          placeholder="Age"
+          keyboardType="numeric"
+          underlineColorAndroid="transparent"
+          onChangeText={(text) => setAge(text)}
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Image
+          style={styles.inputIcon}
+          source={{ uri: 'https://img.icons8.com/ios-glyphs/512/gender.png' }}
+        />
+        <TextInput
+          style={[styles.inputs, { fontSize: 18 }]}
+          placeholder="Gender"
+          underlineColorAndroid="transparent"
+          onChangeText={(text) => setGender(text)}
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Image
+          style={styles.inputIcon}
+          source={{ uri: 'https://icons8.com/icon/80052/numbers-input-form' }}
+        />
+        <TextInput
+          style={[styles.inputs, { fontSize: 18 }]}
+          placeholder="CNIC"
+          keyboardType="numeric"
+          underlineColorAndroid="transparent"
+          onChangeText={(text) => setCNIC(text)}
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Image
+          style={styles.inputIcon}
+          source={{ uri: 'https://img.icons8.com/ios-glyphs/512/map-marker.png' }}
+        />
+        <TextInput
+          style={[styles.inputs, { fontSize: 18 }]}
+          placeholder="District"
+          underlineColorAndroid="transparent"
+          onChangeText={(text) => setDistrict(text)}
+        />
+      </View>
+
       <TouchableOpacity
         style={[styles.buttonContainer, styles.signupButton]}
         onPress={handleSignUp}>
@@ -75,7 +133,6 @@ const SignUpView = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
