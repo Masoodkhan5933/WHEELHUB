@@ -25,30 +25,24 @@ const useStorage = () => {
     }
   };
 
-
   const uploadProfilePicture = async (fileUri) => {
     return uploadFile(fileUri, 'profilePictures');
   };
 
+  const uploadCarPictures = async (carPic) => {
+    const downloadUrl = await uploadFile(carPic, 'carPictures/001');
 
-  const uploadCarPictures = async (carPictures) => {
-    const uploadPromises = carPictures.map(async (fileUri, index) => {
-      const downloadUrl = await uploadFile(
-        fileUri,
-        `carPictures/${auth.currentUser.uid}`
-      );
-      // You can save the downloadUrl to Firestore or handle it as needed
-      return downloadUrl;
-    });
+    // You can save the downloadUrl to Firestore or handle it as needed
+    return downloadUrl;
 
-    try {
-      const carPictureUrls = await Promise.all(uploadPromises);
-      return carPictureUrls;
-    } catch (err) {
-      console.error('Error uploading car pictures: ', err);
-      setError(err);
-      return null;
-    }
+    // try {
+    //   const carPictureUrls = await Promise.all(uploadPromises);
+    //   return carPictureUrls;
+    // } catch (err) {
+    //   console.error('Error uploading car pictures: ', err);
+    //   setError(err);
+    //   return null;
+    // }
   };
 
   return {

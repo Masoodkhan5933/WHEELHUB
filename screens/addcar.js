@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Image } from 'react-native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
-import ImagePicker from 'react-native-image-picker'; // Import image picker
 import Firestore from '../hooks/firestore';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+import { ScrollView } from 'react-native';
+import Storage from '../hooks/storage';
 
 const CarForm = () => {
   const [carData, setCarData] = useState({
@@ -23,6 +26,7 @@ const CarForm = () => {
   });
 
   const { addCar } = Firestore();
+  const { uploadCarPictures } = Storage();
 
   const handleInputChange = (field, value) => {
     setCarData((prevData) => ({
@@ -31,42 +35,63 @@ const CarForm = () => {
     }));
   };
 
-  const handleImagePicker = () => {
-    const options = {
-      title: 'Select Image',
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
+  const handleImagePicker = async () => {
+    try {
+      // Ask for permission
+      const permissionResult =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permissionResult.granted) {
+        alert('Permission to access camera roll is required!');
+        return;
+      }
 
-    ImagePicker.showImagePicker(options, (response) => {
-      if (!response.didCancel && !response.error && !response.customButton) {
+      const pickerResult = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      console.log(pickerResult.assets[0].uri);
+      if (!pickerResult.canceled) {
+        const newPath = FileSystem.documentDirectory + 'tempImage.jpg';
+        await FileSystem.copyAsync({
+          from: pickerResult.assets[0].uri,
+          to: newPath,
+        });
+
         setCarData((prevData) => ({
           ...prevData,
-          image: response.uri,
+          image: newPath,
         }));
+        console.log(newPath);
       }
-    });
+    } catch (error) {
+      console.error('Error picking image:', error);
+      alert('Failed to pick image');
+    }
   };
 
   const handleAddCar = async () => {
     try {
-      await addCar(carData);
+      const ImageUrl = await uploadCarPictures(carData.image);
+      const finalData = { ...carData, image: ImageUrl };
+  
+      await addCar(finalData);
       console.log('Car added successfully');
-
-      // TODO: Handle any additional logic or navigation after adding the car
     } catch (error) {
       console.error('Error adding car:', error);
+  
+      console.log('Firebase Storage Error:', error);
     }
   };
+  
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.heading}>Add Car</Text>
 
       {/* Display selected image */}
-      {carData.image && <Image source={{ uri: carData.image }} style={styles.imagePreview} />}
 
       {/* Input fields */}
       {Object.entries(carData).map(([field, value]) => (
@@ -80,11 +105,22 @@ const CarForm = () => {
       ))}
 
       {/* Image picker button */}
-      <Button title="Select Image" onPress={handleImagePicker} />
+      <Button title='Select Image' onPress={handleImagePicker} />
+
+      {carData.image && (
+        <Image source={{ uri: carData.image }} style={styles.imagePreview} />
+      )}
+
+      {carData.image && (
+        <Button
+          title='Remove Image'
+          onPress={() => handleInputChange('image', null)}
+        />
+      )}
 
       {/* Submit Button */}
-      <Button title="Add Car" onPress={handleAddCar} />
-    </View>
+      <Button title='Add Car' onPress={handleAddCar} />
+    </ScrollView>
   );
 };
 
