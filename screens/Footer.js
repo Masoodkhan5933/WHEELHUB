@@ -115,10 +115,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 
-const Footer = () => {
+const FooterScreen = () => {
   return (
-    <View style={styles.container}>
-      {/* Your main content goes here */}
 
       <View style={styles.footer}>
         <TouchableOpacity style={styles.navButton} onPress={() => console.log('Home pressed')}>
@@ -146,36 +144,31 @@ const Footer = () => {
           <Text style={styles.navText}>More</Text>
         </TouchableOpacity>
       </View>
-    </View>
   );
 };
 
 const styles = {
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 10,
-    position: 'absolute',
+    position: 'relative',
     bottom: 0,
     left: 0,
     right: 0,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    borderWidth: 2, // You can adjust the border width as needed
-    borderColor: '#f0f0f0', // Replace with your preferred off-white color
-    borderRadius: 10, // Adjust the border radius as needed
+    borderWidth: 2, 
+    borderColor: '#f0f0f0', 
+    borderRadius: 10,
   },
   navButton: {
     alignItems: 'center',
     justifyContent: 'center',
     width: 90,
-    height: 55,
+    height: 65,
     borderColor: 'gray',
   },
   
@@ -189,4 +182,4 @@ const styles = {
   },
 };
 
-export default Footer;
+export default FooterScreen;

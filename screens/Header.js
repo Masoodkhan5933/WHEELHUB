@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
 
-const Header = () => {
+const HeaderScreen = () => {
+  
   return (
     <View style={styles.header}>
      <Text style={styles.appName}>
@@ -48,7 +49,7 @@ const styles = {
         backgroundColor:'#154c79', // Change to the desired shade of blue
         paddingVertical: 10,
         width: '100%',
-        height: '40%',
+        height: '23%',
         paddingTop: 50,
       },
       
@@ -112,4 +113,4 @@ const styles = {
   },
 };
 
-export default Header;
+export default HeaderScreen;

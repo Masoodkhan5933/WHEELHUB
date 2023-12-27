@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
-import { useNavigation } from '@react-navigation/native'; // Import the navigation hook
+import { useNavigation } from '@react-navigation/native';
 import useAuth from '../hooks/auth';
 
 const SignUpView = () => {
-  const navigation = useNavigation(); // Hook into the navigation system
+  const navigation = useNavigation();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,32 +13,26 @@ const SignUpView = () => {
   const [gender, setGender] = useState('');
   const [type, setType] = useState('');
 
-  // Use the useAuth hook
   const { signUp } = useAuth();
 
   const handleSignUp = async () => {
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (!emailRegex.test(email)) {
       Alert.alert('Error', 'Invalid email address');
       return;
     }
 
-    // Check password length
     if (password.length < 6) {
       Alert.alert('Error', 'Password should be at least 6 characters');
       return;
     }
 
     try {
-      // Call the signUp function from useAuth hook
       await signUp(email, password, { fullName, age, gender, type });
-      // Handle successful signup
       Alert.alert('Success', 'Account created successfully');
-      // Redirect to the login screen
       navigation.navigate('LoginScreen');
     } catch (error) {
-      // Handle specific errors
       switch (error.code) {
         case 'auth/invalid-email':
           Alert.alert('Error', 'Invalid email address');
@@ -52,10 +46,13 @@ const SignUpView = () => {
     }
   };
 
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}> Sign Up</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Image
+        style={styles.backgroundImage}
+        source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSOzWtWVq7v6MOi6Rr1y2lMyBH_27PkTForA&usqp=CAU' }} // Replace with your background image URL
+      />
+      <Text style={styles.title}>Sign Up</Text>
       <View style={styles.inputContainer}>
         <Image
           style={styles.inputIcon}
@@ -113,34 +110,31 @@ const SignUpView = () => {
       </View>
 
       <View style={styles.pickerContainer}>
-  <RNPickerSelect
-    placeholder={{ label: 'Select Gender', value: null }}
-    onValueChange={(value) => setGender(value)}
-    items={[
-      { label: 'Male', value: 'Male' },
-      { label: 'Female', value: 'Female' },
-    ]}
-  />
-</View>
+        <RNPickerSelect
+          placeholder={{ label: 'Select Gender', value: null }}
+          onValueChange={(value) => setGender(value)}
+          items={[
+            { label: 'Male', value: 'Male' },
+            { label: 'Female', value: 'Female' },
+          ]}
+        />
+      </View>
 
-<View style={styles.pickerContainer}>
-  <RNPickerSelect
-    placeholder={{ label: 'Select Type', value: null }}
-    onValueChange={(value) => setType(value)}
-    items={[
-      { label: 'Buyer', value: 'Buyer' },
-      { label: 'Seller', value: 'Seller' },
-    ]}
-  />
-</View>
+      <View style={styles.pickerContainer}>
+        <RNPickerSelect
+          placeholder={{ label: 'Select Type', value: null }}
+          onValueChange={(value) => setType(value)}
+          items={[
+            { label: 'Buyer', value: 'Buyer' },
+            { label: 'Seller', value: 'Seller' },
+          ]}
+        />
+      </View>
 
-
-      <TouchableOpacity
-        style={[styles.buttonContainer, styles.signupButton]}
-        onPress={handleSignUp}>
+      <TouchableOpacity style={[styles.buttonContainer, styles.signupButton]} onPress={handleSignUp}>
         <Text style={styles.signUpText}>Sign up</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -149,7 +143,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#00b5ec',
+  },
+  backgroundImage: {
+    position: 'absolute',
+    resizeMode: 'cover',
+    width: '100%',
+    height: '100%',
   },
   inputContainer: {
     borderBottomColor: '#F5FCFF',
@@ -191,9 +190,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   title: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 50,
-    color: "#fb5b5a",
+    color: 'white',
     marginBottom: 40,
   },
   pickerContainer: {
@@ -213,7 +212,5 @@ const styles = StyleSheet.create({
     paddingRight: 30,
   },
 });
-
-
 
 export default SignUpView;

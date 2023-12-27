@@ -33,8 +33,8 @@ const useAuth = () => {
       await signInWithEmailAndPassword(auth, email, password);
       const userProfile = await getUserProfile(auth.currentUser.uid);
       setUser({ ...auth.currentUser, ...userProfile });
+      console.log(user);
     } catch (error) {
-      console.error('Sign In Error:', error.code, error.message);
       throw error;
     } finally {
       setLoading(false);
@@ -52,7 +52,6 @@ const useAuth = () => {
       await setUserProfile(userCredential.user.uid, data);
       setUser({ ...userCredential.user, ...data });
     } catch (error) {
-      console.error('Sign Up Error:', error.code, error.message);
       throw error;
     }
   };
@@ -62,7 +61,6 @@ const useAuth = () => {
       await signOut(auth);
       setUser(null);
     } catch (error) {
-      console.error('Sign Out Error:', error.code, error.message);
       throw error;
     }
   };

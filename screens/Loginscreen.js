@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, Button, ImageBackground, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet } from 'react-native';
 import useAuth from '../hooks/auth';
 import { useNavigation } from '@react-navigation/native';
 
-const Loginscreen = () => {
-  const { signIn } = useAuth();
+const LoginScreen = () => {
+  const { signIn, loading } = useAuth();
   const navigation = useNavigation();
-  
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
@@ -14,14 +14,12 @@ const Loginscreen = () => {
 
   const onPressLogin = async () => {
     try {
-      // Check if email or password is empty
       if (!credentials.email || !credentials.password) {
         Alert.alert('Invalid Input', 'Please enter both email and password.');
         return;
       }
-  
+
       await signIn(credentials.email, credentials.password);
-      // Navigate to the home page upon successful login
       navigation.navigate('Home');
     } catch (error) {
       if (error.code === 'auth/invalid-credential') {
@@ -31,98 +29,116 @@ const Loginscreen = () => {
       }
     }
   };
-  
-  
-  
 
   const onPressForgotPassword = () => {
     // Implement your forgot password logic here
   };
 
   const onPressSignUp = () => {
-    // Navigate to the sign-up page
     navigation.navigate('SignUp');
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Login Screen</Text>
-      <View style={styles.inputView}>
-        <TextInput
-          style={[styles.inputText, styles.emailInput]}
-          placeholder="Email"
-          placeholderTextColor="#003f5c"
-          onChangeText={(text) => setCredentials({ ...credentials, email: text })}
-        />
+    <ImageBackground
+      source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6yT2sLJU6tTGHhWzCmWu-7ZJQxXTjj3_QdYG-U_AO68xEb9_VoO0Ey_Nmzm2ECrAtdEc&usqp=CAU' }}
+      style={styles.background}
+    >
+      <View style={styles.container}>
+        <View style={styles.formContainer}>
+          <Text style={styles.title}>Login Screen</Text>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.inputText}
+              placeholder="Email"
+              placeholderTextColor="#003f5c"
+              onChangeText={(text) => setCredentials({ ...credentials, email: text })}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.inputText}
+              secureTextEntry
+              placeholder="Password"
+              placeholderTextColor="#003f5c"
+              onChangeText={(text) => setCredentials({ ...credentials, password: text })}
+            />
+          </View>
+          <TouchableOpacity onPress={onPressForgotPassword}>
+            <Text style={styles.forgotAndSignUpText}>Forgot Password?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onPressLogin} style={styles.loginBtn}>
+            {loading ? (
+              <ActivityIndicator size="small" color="white" />
+            ) : (
+              <Text style={styles.loginText}>LOGIN</Text>
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onPressSignUp}>
+            <Text style={styles.forgotAndSignUpText}>Signup</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.inputView}>
-        <TextInput
-          style={[styles.inputText, styles.passwordInput]}
-          secureTextEntry
-          placeholder="Password"
-          placeholderTextColor="#003f5c"
-          onChangeText={(text) => setCredentials({ ...credentials, password: text })}
-        />
-      </View>
-      <TouchableOpacity onPress={onPressForgotPassword}>
-        <Text style={styles.forgotAndSignUpText}>Forgot Password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={onPressLogin} style={styles.loginBtn}>
-        <Text style={styles.loginText}>LOGIN</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={onPressSignUp}>
-        <Text style={styles.forgotAndSignUpText}>Signup</Text>
-      </TouchableOpacity>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
   container: {
-  flex: 1,
-  backgroundColor: '#4FD3DA',
-  alignItems: 'center',
-  justifyContent: 'center',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
   },
-  title:{
-  fontWeight: "bold",
-  fontSize:50,
-  color:"#fb5b5a",
-  marginBottom: 40,
+  formContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: 25,
+    padding: 20,
+    width: '80%',
+    alignItems: 'center',
   },
-  inputView:{
-  width:"80%",
-  backgroundColor:"#3AB4BA",
-  borderRadius:25,
-  height:50,
-  marginBottom:20,
-  justifyContent:"center",
-  padding:20
+  title: {
+    fontWeight: 'bold',
+    fontSize: 30,
+    color: '#fb5b5a',
+    marginBottom: 20,
   },
-  inputText:{
-  height:50,
-  color:"white"
+  inputView: {
+    width: '80%',
+    backgroundColor: '#3AB4BA',
+    borderRadius: 25,
+    height: 50,
+    marginBottom: 20,
+    justifyContent: 'center',
+    padding: 20,
   },
-  forgotAndSignUpText:{
-  color:"white",
-  fontSize:30,
+  inputText: {
+    height: 50,
+    color: 'white',
+    fontSize: 18,
   },
-  loginBtn:{
-  width:"80%",
-  backgroundColor:"#fb5b5a",
-  borderRadius:25,
-  height:50,
-  alignItems:"center",
-  justifyContent:"center",
-  marginTop:40,
-  marginBottom:10
+  forgotAndSignUpText: {
+    color: 'white',
+    fontSize: 20,
   },
-  emailInput: {
-      fontSize: 18, 
-      },
-  passwordInput: {
-       fontSize: 18, 
-    },
-  });
+  loginBtn: {
+    width: '80%',
+    backgroundColor: '#fb5b5a',
+    borderRadius: 25,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  loginText: {
+    fontSize: 20,
+    color: 'white',
+  },
+});
 
-export default Loginscreen;
+export default LoginScreen;
