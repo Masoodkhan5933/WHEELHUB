@@ -6,14 +6,13 @@ import LoginScreen from './screens/Loginscreen';
 import SignUpView from './screens/SignUpView';
 import DetailScreen from './screens/DetailScreen';
 import AboutUsScreen from './screens/AboutUsScreen';
-import CarForm from './screens/addcar';
 
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Home"
           component={HomeScreen}

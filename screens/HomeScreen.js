@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ImageBackground, Picker, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Navbar from './NavBar';
 import Firestore from '../hooks/firestore';
+
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const [selectedCarModel, setSelectedCarModel] = useState('');
-  const [selectedPriceRange, setSelectedPriceRange] = useState('');
-  const [selectedCity, setSelectedCity] = useState('');
   const [visibleProducts, setVisibleProducts] = useState(4);
   const [cars, setCars] = useState([]);
 
-  const { getCars} = Firestore();
+  const { getCars } = Firestore();
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -24,7 +21,7 @@ const HomeScreen = () => {
     };
 
     fetchCars();
-  }, []); 
+  }, []);
 
   const showMoreProducts = () => {
     setVisibleProducts((prevVisibleProducts) => prevVisibleProducts + 4);
@@ -32,21 +29,23 @@ const HomeScreen = () => {
 
   const navigateToDetail = (car) => {
     navigation.navigate('Detail', { car });
-  };
+  };  
 
   return (
-    <View style={styles.container}>
-      {/* Your existing code here */}
-
+    <ScrollView style={styles.container}>
       {/* Display Product Cards */}
       <View style={styles.productContainer}>
         {cars.slice(0, visibleProducts).map((car) => (
           <TouchableOpacity key={car.id} onPress={() => navigateToDetail(car)} style={styles.productCard}>
-            {/* Adjust the properties based on your car data structure */}
             <Image source={{ uri: car.image }} style={styles.productImage} />
-            <Text style={styles.productName}>{car.carName}</Text>
-            <Text style={styles.productPrice}>Price: ${car.price}</Text>
-            <Text style={styles.productCity}>City: {car.city}</Text>
+            <View style={styles.productDetails}>
+              <Text style={styles.productName}>{car.carName}</Text>
+              <Text style={styles.productPrice}>Price: ${car.price}</Text>
+              <Text style={styles.productInfo}>Make: {car.make}</Text>
+              <Text style={styles.productInfo}>Type: {car.bodyType}</Text>
+              <Text style={styles.productInfo}>Model Year: {car.modelYear}</Text>
+              <Text style={styles.productInfo}>Transmission: {car.transmission}</Text>
+            </View>
           </TouchableOpacity>
         ))}
       </View>
@@ -56,108 +55,76 @@ const HomeScreen = () => {
           <Text style={styles.showMoreButtonText}>Show More</Text>
         </TouchableOpacity>
       )}
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: 'rgba(255, 255, 255, 0.7)', // Use rgba for transparent background
+    margin: 10,
   },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center',
-  },
-  landingContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 100,
-  },
-  textContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  mainTitle: {
-    fontSize: 35,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 16,
-    color: '#000',
-  },
-  subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: 8,
-    color: '#000',
-  },
-  searchContainer: {
-    marginTop: 16,
-    width: '80%', // Adjust the width as needed
-    alignSelf: 'center', // Center the search container
-  
-    borderRadius: 8,
-    padding: 16,
-  },
-  picker: {
-    height: 40,
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-
   showMoreButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: '#3498db', // Blue color
     padding: 10,
     borderRadius: 8,
     alignSelf: 'center',
     marginTop: 10,
   },
   showMoreButtonText: {
-    color: '#000',
+    color: '#fff', // White color
     fontWeight: 'bold',
   },
-
   productContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
     marginTop: 16,
+    width: '100%',
   },
   productCard: {
-    width: '45%',
-    height: 250, // Adjust the height as needed
+    width: 'auto',
+    height: 170,
     marginVertical: 8,
-  },
-  cardBackground: {
-    flex: 1,
-    borderRadius: 8,
-    overflow: 'hidden',
+    flexDirection: 'row',
+    borderRadius: 10,
+    backgroundColor: '#ecf0f1', // Light gray background
+    elevation: 3, // Add elevation for shadow on Android
+    shadowColor: '#000', // Shadow color for iOS
+    shadowOffset: { width: 0, height: 2 }, // Shadow offset for iOS
+    shadowOpacity: 0.2, // Shadow opacity for iOS
+    shadowRadius: 2, // Shadow radius for iOS
   },
   productImage: {
-    width: '100%',
-    height: '70%', // Adjust the height as needed
+    width: '50%',
+    height: '90%',
+    marginTop: 5,
+    marginLeft: 4,
     borderRadius: 8,
+  },
+  productDetails: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    marginLeft: 4,
   },
   productName: {
     fontSize: 16,
     marginVertical: 4,
-    color: '#000',
-    textAlign: 'center',
+    fontWeight: 'bold',
+    color: '#2c3e50', // Dark gray text
+  },
+  productInfo: {
+    fontSize: 14,
+    marginBottom: 4,
+    color: '#555',
   },
   productPrice: {
     fontSize: 14,
     marginBottom: 4,
-    color: '#555',
-    textAlign: 'center',
+    color: '#e74c3c', // Red color for price
   },
   productCity: {
     fontSize: 14,
     color: '#555',
-    textAlign: 'center',
   },
 });
 
