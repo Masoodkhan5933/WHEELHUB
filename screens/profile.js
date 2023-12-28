@@ -12,7 +12,8 @@ const ProfilePage = () => {
   const { getUserProfile }= Firestore();
   
   
-  const cuser=getUserProfile(user.auth.currentUser.uid);
+  // const cuser=getUserProfile(user.auth.currentUser.uid);
+  
   const handleSignOut = async () => {
     try {
       await signOutUser();
@@ -34,9 +35,9 @@ const ProfilePage = () => {
       </View>
 
       <View style={styles.detailsContainer}>
-        <Text style={styles.detailText}>Name: {cuser.fullName}</Text>
+        {/* <Text style={styles.detailText}>Name: {cuser.fullName}</Text>
         <Text style={styles.detailText}>Address: {cuser.address}</Text>
-        <Text style={styles.detailText}>Gender: {cuser.gender}</Text>
+        <Text style={styles.detailText}>Gender: {cuser.gender}</Text> */}
       </View>
 
       <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>

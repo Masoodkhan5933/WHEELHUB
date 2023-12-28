@@ -21,7 +21,7 @@ const App = () => {
   return (
     <NavigationContainer>
       {user && <HeaderScreen user={user} signOutUser={signOutUser} />}
-      <Stack.Navigator initialRouteName={'SignUp'}>
+      <Stack.Navigator initialRouteName={'Login'}>
         <Stack.Screen name="Home" component={HomeScreen} options={{ title: 'Home' }} />
         <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
         <Stack.Screen name="SignUp" component={SignUpView} options={{ title: 'Sign Up' }} />
