@@ -32,7 +32,6 @@ const useStorage = () => {
   const uploadCarPictures = async (carPic) => {
     const downloadUrl = await uploadFile(carPic, 'carPictures/001');
 
-    // You can save the downloadUrl to Firestore or handle it as needed
     return downloadUrl;
   };
 

@@ -84,7 +84,6 @@ const CarForm = () => {
         ImageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzZmIGkJTvg0kE17Eh7O7AnXXzVBlQzpB-yQ&usqp=CAUhttps://example.com/dummy-image.jpg';
       }
 
-      // Optionally, reset the form after submission
       setCarData({
         carName: '',
         price: '',
