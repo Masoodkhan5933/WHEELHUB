@@ -18,6 +18,7 @@ const useAuth = () => {
       if (user) {
         const userProfile = await getUserProfile(user.uid);
         setUser({ ...user, ...userProfile });
+
       } else {
         setUser(null);
       }
@@ -33,7 +34,7 @@ const useAuth = () => {
       await signInWithEmailAndPassword(auth, email, password);
       const userProfile = await getUserProfile(auth.currentUser.uid);
       setUser({ ...auth.currentUser, ...userProfile });
-      console.log(user);
+      
     } catch (error) {
       throw error;
     } finally {
@@ -50,7 +51,6 @@ const useAuth = () => {
       );
       delete data.password; // Don't store the password in the user profile
       await setUserProfile(userCredential.user.uid, data);
-      setUser({ ...userCredential.user, ...data });
     } catch (error) {
       throw error;
     }

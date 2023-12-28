@@ -36,10 +36,6 @@ const Firestore = () => {
     }
   };
 
-
-
-
-
   // User operations
   const addUser = async (userData) => {
     const usersRef = collection(firestore, 'users');

@@ -3,6 +3,9 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert, Scro
 import RNPickerSelect from 'react-native-picker-select';
 import { useNavigation } from '@react-navigation/native';
 import useAuth from '../hooks/auth';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+import useStorage from '../hooks/storage';
 
 const SignUpView = () => {
   const navigation = useNavigation();
@@ -12,8 +15,41 @@ const SignUpView = () => {
   const [age, setAge] = useState('');
   const [gender, setGender] = useState('');
   const [type, setType] = useState('');
+  const [profileImage, setProfileImage] = useState(null); 
 
   const { signUp } = useAuth();
+  const { uploadProfilePicture } = useStorage();
+
+  const handleImagePicker = async () => {
+    try {
+      const permissionResult =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permissionResult.granted) {
+        alert('Permission to access camera roll is required!');
+        return;
+      }
+
+      const pickerResult = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!pickerResult.canceled) {
+        const newPath = FileSystem.documentDirectory + 'tempImage.jpg';
+        await FileSystem.copyAsync({
+          from: pickerResult.assets[0].uri,
+          to: newPath,
+        });
+
+        setProfileImage(newPath); // Corrected this line
+        console.log(newPath);
+      }
+    } catch (error) {
+      alert('Failed to pick image');
+    }
+  };
 
   const handleSignUp = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -29,9 +65,19 @@ const SignUpView = () => {
     }
 
     try {
-      await signUp(email, password, { fullName, age, gender, type });
+      let profileImageUrl = null;
+
+      if (profileImage) {
+        profileImageUrl = await uploadProfilePicture(profileImage);
+        console.log(profileImageUrl)
+        setProfileImage(profileImageUrl)
+      } else {
+        profileImageUrl = 'https://cdn.pixabay.com/photo/2015/03/04/22/35/avatar-659651_640.png';
+      }
+      await signUp(email, password, { fullName, age, gender, type, profileImageUrl });
+
       Alert.alert('Success', 'Account created successfully');
-      navigation.navigate('LoginScreen');
+      navigation.navigate('Login');
     } catch (error) {
       switch (error.code) {
         case 'auth/invalid-email':
@@ -45,6 +91,7 @@ const SignUpView = () => {
       }
     }
   };
+
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -131,6 +178,22 @@ const SignUpView = () => {
         />
       </View>
 
+      {/* Add Image Button */}
+      <TouchableOpacity style={[styles.buttonContainer, styles.addImageButton]} onPress={handleImagePicker}>
+        <Text style={styles.addImageText}>Add Image</Text>
+      </TouchableOpacity>
+
+      {/* Display selected image */}
+      {profileImage && (
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: profileImage }} style={styles.imagePreview} />
+        </View>
+      )}
+
+     
+
+      {/* Your existing code... */}
+      
       <TouchableOpacity style={[styles.buttonContainer, styles.signupButton]} onPress={handleSignUp}>
         <Text style={styles.signUpText}>Sign up</Text>
       </TouchableOpacity>
@@ -210,6 +273,13 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     color: 'black',
     paddingRight: 30,
+  },
+  addImageButton: {
+    backgroundColor: '#4CAF50',
+  },
+  addImageText: {
+    color: 'white',
+    fontSize: 18,
   },
 });
 

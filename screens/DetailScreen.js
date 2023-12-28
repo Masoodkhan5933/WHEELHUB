@@ -28,12 +28,6 @@ const DetailScreen = ({ route, navigation }) => {
   );
 };
 
-// Set the navigationOptions for DetailScreen
-DetailScreen.navigationOptions = ({ navigation }) => ({
-  headerLeft: () => (
-    <HeaderBackButton onPress={() => navigation.navigate('Home')} tintColor="#000" />
-  ),
-});
 
 const styles = StyleSheet.create({
   container: {
