@@ -1,69 +1,102 @@
-// DetailScreen.js
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
 import { HeaderBackButton } from '@react-navigation/stack';
 
 const DetailScreen = ({ route, navigation }) => {
   const { car } = route.params;
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Image source={{ uri: car.image }} style={styles.productImage} />
       <View style={styles.detailsContainer}>
         <Text style={styles.productName}>{car.carName}</Text>
-        <Text style={styles.productPrice}>Price: ${car.price}</Text>
-        <Text style={styles.productInfo}>Make: {car.make}</Text>
-        <Text style={styles.productInfo}>Type: {car.bodyType}</Text>
-        <Text style={styles.productInfo}>Model Year: {car.modelYear}</Text>
-        <Text style={styles.productInfo}>Transmission: {car.transmission}</Text>
-        <Text style={styles.productInfo}>Mileage: {car.mileage} miles</Text>
-        <Text style={styles.productInfo}>Seating Capacity: {car.seatingCapacity}</Text>
-        <Text style={styles.productInfo}>Engine Capacity: {car.engineCapacity}</Text>
-        <Text style={styles.productInfo}>Registered Year: {car.registeredYear}</Text>
-        <Text style={styles.productInfo}>Registered City: {car.registeredCity}</Text>
-        <Text style={styles.productInfo}>City: {car.city}</Text>
-        {/* Add more fields as needed */}
+        <View style={styles.separator} />
+        <Text style={styles.productPrice}>${car.price}</Text>
+        <View style={styles.infoContainer}>
+          <Text style={styles.productInfo}>
+            <Text style={styles.infoLabel}>Make:</Text> {car.make}
+          </Text>
+          <Text style={styles.productInfo}>
+            <Text style={styles.infoLabel}>Type:</Text> {car.bodyType}
+          </Text>
+          <Text style={styles.productInfo}>
+            <Text style={styles.infoLabel}>Model Year:</Text> {car.modelYear}
+          </Text>
+          <Text style={styles.productInfo}>
+            <Text style={styles.infoLabel}>Transmission:</Text> {car.transmission}
+          </Text>
+          <Text style={styles.productInfo}>
+            <Text style={styles.infoLabel}>Mileage:</Text> {car.mileage} miles
+          </Text>
+          <Text style={styles.productInfo}>
+            <Text style={styles.infoLabel}>Seating Capacity:</Text> {car.seatingCapacity}
+          </Text>
+          <Text style={styles.productInfo}>
+            <Text style={styles.infoLabel}>Engine Capacity:</Text> {car.engineCapacity} cc
+          </Text>
+          <Text style={styles.productInfo}>
+            <Text style={styles.infoLabel}>Registered Year:</Text> {car.registeredYear}
+          </Text>
+          <Text style={styles.productInfo}>
+            <Text style={styles.infoLabel}>Registered City:</Text> {car.registeredCity}
+          </Text>
+          <Text style={styles.productInfo}>
+            <Text style={styles.infoLabel}>City:</Text> {car.city}
+          </Text>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#ecf0f1', // Light gray background
+    backgroundColor: '#ffffff',
   },
   productImage: {
     width: '100%',
-    height: '40%',
-    borderRadius: 8,
+    height: 300,
+    resizeMode: 'cover',
+    alignSelf: 'center',
   },
   detailsContainer: {
-    padding: 16,
-    backgroundColor: '#fff', // White background
-    borderRadius: 8,
-    marginTop: -20, // Adjust the margin as needed
+    flex: 1,
+    paddingVertical: 24,
+    paddingHorizontal: 16,
+    backgroundColor: '#ffffff',
   },
   productName: {
-    fontSize: 20,
-    marginVertical: 8,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#2c3e50', // Dark gray text
+    color: '#34495e',
     textAlign: 'center',
+    marginBottom: 16,
   },
-  productInfo: {
-    fontSize: 14,
-    marginBottom: 4,
-    color: '#555',
+  separator: {
+    borderBottomColor: '#ecf0f1',
+    borderBottomWidth: 2,
+    marginVertical: 8,
   },
   productPrice: {
-    fontSize: 16,
-    marginBottom: 8,
-    color: '#e74c3c', // Red color for price
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#2596be',
     textAlign: 'center',
+    marginBottom: 16,
+  },
+  infoContainer: {
+    marginTop: 16,
+  },
+  productInfo: {
+    fontSize: 16,
+    color: '#2c3e50', // Darker text color for better visibility
+    marginBottom: 8,
+    lineHeight: 24,
+  },
+  infoLabel: {
+    fontWeight: 'bold',
+    color: '#3498db', // Highlight label in a different color
   },
 });
 

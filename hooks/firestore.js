@@ -13,6 +13,7 @@ import { firestore } from '../database/dbconfig';
 
 const Firestore = () => {
   const [loading, setLoading] = useState(false);
+  const [carss, setCars] = useState("");
 
   const setUserProfile = async (userId, profileData) => {
     try {
@@ -68,6 +69,37 @@ const Firestore = () => {
   };
 
   // Car operations
+  const filterCars = async (filters) => {
+    setLoading(true);
+    
+    try {
+      let filteredCars = await getCars(); // Get all cars initially
+
+      // Apply filters
+      if (filters.make) {
+        filteredCars = filteredCars.filter((car) => car.make === filters.make);
+      }
+
+      if (filters.transmission) {
+        filteredCars = filteredCars.filter((car) => car.transmission === filters.transmission);
+      }
+
+      if (filters.province) {
+        filteredCars = filteredCars.filter((car) => car.province === filters.province);
+      }
+
+      // You can add more filters as needed
+
+      setCars(filteredCars); // Update the cars data
+    } catch (error) {
+      console.error('Error filtering cars:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+
   const addCar = async (carData) => {
     try {
       const carsCollection = collection(firestore, 'cars');
@@ -89,10 +121,17 @@ const Firestore = () => {
   };
 
   const getCars = async () => {
-    const carsCollection = collection(firestore, 'cars');
-    const querySnapshot = await getDocs(carsCollection);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  };
+    try {
+      const carsCollection = collection(firestore, 'cars');
+      const querySnapshot = await getDocs(carsCollection);
+      const carsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setCars(carsData); // Update the state using setCars
+      return carsData; // Return the data
+    } catch (error) {
+      console.error('Error fetching cars:', error);
+      return []; 
+    }
+  }
 
   const carExists = async (carName) => {
     setLoading(true);
@@ -116,6 +155,8 @@ const Firestore = () => {
     updateCar,
     getCars,
     carExists,
+    filterCars,
+    carss,
     loading,
   };
 };

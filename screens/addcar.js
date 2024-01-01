@@ -6,6 +6,7 @@ import Firestore from '../hooks/firestore';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { Alert } from 'react-native';
+import useStorage from '../hooks/storage';
 
 const CarForm = () => {
   const [carData, setCarData] = useState({
@@ -27,6 +28,7 @@ const CarForm = () => {
   });
 
   const { addCar } = Firestore();
+  const {uploadCarPictures}=useStorage();
 
   const handleInputChange = (field, value) => {
     setCarData((prevData) => ({

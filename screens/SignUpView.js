@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
 import { useNavigation } from '@react-navigation/native';
@@ -17,9 +17,15 @@ const SignUpView = () => {
   const [type, setType] = useState('');
   const [profileImage, setProfileImage] = useState(null); 
 
-  const { signUp } = useAuth();
+  const { user,signUp } = useAuth();
   const { uploadProfilePicture } = useStorage();
 
+  
+  useEffect(() => {
+    if (user) {
+      navigation.replace('Home');
+    }
+  }, [user, navigation]);
   const handleImagePicker = async () => {
     try {
       const permissionResult =

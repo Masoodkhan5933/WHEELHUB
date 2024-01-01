@@ -11,23 +11,23 @@ const HeaderScreen = () => {
   <Text style={{ color: 'white' }}>.COM</Text>
 </Text>
 
-      <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.headerButton} onPress={() => console.log('Used Cars pressed')}>
-          <Text style={styles.buttonText}>Used Cars</Text>
+      {/* <View style={styles.buttonRow}>
+        <TouchableOpacity style={styles.headerButton} onPress={() => console.log('Toyota pressed')}>
+          <Text style={styles.buttonText}>Toyota</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.headerButton} onPress={() => console.log('New Cars pressed')}>
-          <Text style={styles.buttonText}>New Cars</Text>
+        <TouchableOpacity style={styles.headerButton} onPress={() => console.log('Manual pressed')}>
+          <Text style={styles.buttonText}>Manual</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.headerButton} onPress={() => console.log('Bikes pressed')}>
-          <Text style={styles.buttonText}>Bikes</Text>
+        <TouchableOpacity style={styles.headerButton} onPress={() => console.log('SUV')}>
+          <Text style={styles.buttonText}>SUV</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.headerButton} onPress={() => console.log('Auto Parts pressed')}>
-          <Text style={styles.buttonText}>Auto Parts</Text>
+        <TouchableOpacity style={styles.headerButton} onPress={() => console.log('KPK pressed')}>
+          <Text style={styles.buttonText}>KPK</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       <View style={styles.searchBar}>
         <Image source={require('../assets/search_icon.png')} style={styles.searchIcon} />
@@ -49,8 +49,9 @@ const styles = {
         backgroundColor:'#154c79', // Change to the desired shade of blue
         paddingVertical: 10,
         width: '100%',
-        height: '23%',
+        height: '20%',
         paddingTop: 50,
+        padding:10
       },
       
       
@@ -83,6 +84,7 @@ const styles = {
     backgroundColor: '#fff',
     borderRadius: 20,
     paddingHorizontal: 10,
+    
   },
   searchIcon: {
     width: 20,
@@ -109,7 +111,7 @@ const styles = {
     backgroundColor: '#fff',
     borderRadius: 20,
     paddingHorizontal: 10,
-    marginTop: 15, // Adjust this value as needed
+    marginTop: 15,
   },
 };
 

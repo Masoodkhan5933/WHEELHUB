@@ -6,24 +6,18 @@ const FooterScreen = () => {
 
   const Navigation= useNavigation();
   return (
-
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.navButton} onPress={() => console.log('Home pressed')}>
+        <TouchableOpacity style={styles.navButton} onPress={() => Navigation.navigate('Home')}>
           <Image source={require('../assets/home_icon.png')} style={styles.navIcon} />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navButton} onPress={() => console.log('My Ads pressed')}>
-          <Image source={require('../assets/my_adds.png')} style={styles.navIcon} />
-          <Text style={styles.navText}>My Ads</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.navButton} onPress={() => console.log('Sell Now pressed')}>
+        <TouchableOpacity style={styles.navButton} onPress={() => Navigation.navigate('CarForm')}>
           <Image source={require('../assets/sell_icon.png')} style={styles.navIcon} />
           <Text style={styles.navText}>Sell Now</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.navButton} onPress={() => console.log('Chat pressed')}>
+        <TouchableOpacity style={styles.navButton} onPress={() => Navigation.navigate('ContactUs')}>
           <Image source={require('../assets/contact_us.png')} style={styles.navIcon} />
           <Text style={styles.navText}>Contact us</Text>
         </TouchableOpacity>

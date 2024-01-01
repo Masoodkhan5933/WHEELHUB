@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, ImageBackground, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { StyleSheet } from 'react-native';
 import useAuth from '../hooks/auth';
 import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
-  const { signIn, loading } = useAuth();
+  const { signIn, loading, user } = useAuth();
   const navigation = useNavigation();
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
   });
+
+  useEffect(() => {
+    // If the user is already logged in, navigate to the Home screen
+    if (user) {
+      navigation.replace('Home');
+    }
+  }, [user, navigation]);
 
   const onPressLogin = async () => {
     try {
@@ -122,7 +129,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   forgotAndSignUpText: {
-    color: 'white',
+    color: 'grey',
     fontSize: 20,
   },
   loginBtn: {
