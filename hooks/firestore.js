@@ -7,6 +7,7 @@ import {
   collection,
   doc,
   setDoc,
+  updateDoc
 } from 'firebase/firestore';
 import { useState } from 'react';
 import { firestore } from '../database/dbconfig';
